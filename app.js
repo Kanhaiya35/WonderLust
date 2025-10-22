@@ -1,29 +1,24 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const Listing = require("./models/listing.js");
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
+const { listingSchema } = require("./schema.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
 
-// Connect to MongoDB
-main()
-  .then(() => {
-    console.log("Connected to DB");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
+// MongoDB Connection
 async function main() {
   await mongoose.connect(MONGO_URL);
+  console.log("✅ Connected to MongoDB");
 }
+main().catch(err => console.error("Mongo Connection Error:", err));
 
-// View Engine Setup
+// EJS Setup
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -38,28 +33,35 @@ app.get("/", (req, res) => {
   res.send("Hii, I am root");
 });
 
+const validateListing = (req ,res,next) => {
+  let {error} = listingSchema.validate(req.body);
+  if (error) {
+    let errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  }else {
+    next();
+  }
+}
+
 // INDEX Route - Show all listings
 app.get("/listings", wrapAsync(async (req, res) => {
   const allListings = await Listing.find({});
   res.render("listings/index.ejs", { allListings });
 }));
 
-// NEW Route - Form to create new listing
+// NEW Route - Show form to create new listing
 app.get("/listings/new", (req, res) => {
   res.render("listings/new.ejs");
 });
 
-// CREATE Route - Add new listing to DB
-app.post("/listings", wrapAsync(async (req, res) => {
-    if(!req.body.listing) {
-        throw new ExpressError(400,"send vaild data for listing")
-    }
+// CREATE Route - Add new listing
+app.post("/listings",validateListing, wrapAsync(async (req, res) => {
   const newListing = new Listing(req.body.listing);
   await newListing.save();
   res.redirect("/listings");
 }));
 
-// SHOW Route - Show details for one listing
+// SHOW Route - Show one listing
 app.get("/listings/:id", wrapAsync(async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
@@ -67,7 +69,7 @@ app.get("/listings/:id", wrapAsync(async (req, res) => {
   res.render("listings/show.ejs", { listing });
 }));
 
-// EDIT Route - Form to edit a listing
+// EDIT Route
 app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
   const { id } = req.params;
   const listing = await Listing.findById(id);
@@ -75,35 +77,32 @@ app.get("/listings/:id/edit", wrapAsync(async (req, res) => {
   res.render("listings/edit.ejs", { listing });
 }));
 
-// UPDATE Route - Save edited listing
-app.put("/listings/:id", wrapAsync(async (req, res) => {
-    if(!req.body.listing) {
-        throw new ExpressError(400,"send vaild data for listing")
-    }
+// UPDATE Route
+app.put("/listings/:id",validateListing, wrapAsync(async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndUpdate(id, { ...req.body.listing });
   res.redirect(`/listings/${id}`);
 }));
 
-// DELETE Route - Delete a listing
+// DELETE Route
 app.delete("/listings/:id", wrapAsync(async (req, res) => {
   const { id } = req.params;
   await Listing.findByIdAndDelete(id);
   res.redirect("/listings");
 }));
 
-// Handle All Other Routes (404)
-// app.all("*", (req, res, next) => {
-//   next(new ExpressError(404, "Page Not Found!"));
-// });
+// 404 Handler
+app.all("/listings/:id,/listings/:id/edit ,/listings,/listings/new,/", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found!"));
+});
 
 // Error Handler
 app.use((err, req, res, next) => {
   const { statusCode = 500, message = "Something went wrong!" } = err;
-  res.status(statusCode).send(message);
+  res.status(statusCode).render("error.ejs", { message });
 });
 
-// Start Server
+// Server Start
 app.listen(8080, () => {
-  console.log("Server is listening on port 8080");
+  console.log("🚀 Server running on port 8080");
 });
