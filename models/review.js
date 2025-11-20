@@ -22,6 +22,10 @@ const reviewSchema = new Schema(
       type: Date,
       default: Date.now, // ✅ use function reference, not immediate call
     },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    },
   },
   { timestamps: true } // ✅ adds createdAt & updatedAt automatically
 );

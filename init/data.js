@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+const Listing = require("../models/listing");
 const sampleListings = [
   {
     title: "Cozy Beachfront Cottage",

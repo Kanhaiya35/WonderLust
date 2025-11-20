@@ -1,0 +1,78 @@
+<% layout("layouts/boilerplate") %>
+
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card shadow-lg p-5 rounded-4 border-0" style="max-width: 450px; width: 100%;">
+    
+    <!-- 🏷 Header -->
+    <div class="text-center mb-4">
+      <h2 class="fw-bold text-dark">Join WonderLust ✨</h2>
+      <p class="text-muted">Create your account and start exploring</p>
+    </div>
+
+    <form action="/signup" method="POST" class="needs-validation" novalidate>
+      
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label fw-semibold">Username</label>
+        <input 
+          name="username" 
+          id="username" 
+          type="text" 
+          class="form-control form-control-lg" 
+          placeholder="Enter your username" 
+          required>
+        <div class="invalid-feedback">Please enter your username.</div>
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold">Email</label>
+        <input 
+          name="email" 
+          id="email" 
+          type="email" 
+          class="form-control form-control-lg" 
+          placeholder="Enter your email" 
+          required>
+        <div class="invalid-feedback">Please enter a valid email address.</div>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-4">
+        <label for="password" class="form-label fw-semibold">Password</label>
+        <input 
+          name="password" 
+          id="password" 
+          type="password" 
+          class="form-control form-control-lg" 
+          placeholder="Enter your password" 
+          required>
+        <div class="invalid-feedback">Password is required.</div>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-danger w-100 py-2 fw-semibold">
+        Create Account
+      </button>
+
+      <!-- Divider -->
+      <div class="text-center text-muted small my-3">or</div>
+
+      <!-- 🌐 Mock Social Buttons -->
+      <div class="d-grid gap-2 mb-3">
+        <button type="button" class="btn btn-outline-secondary">
+          <i class="bi bi-google me-2"></i> Sign up with Google
+        </button>
+        <button type="button" class="btn btn-outline-secondary">
+          <i class="bi bi-facebook me-2"></i> Sign up with Facebook
+        </button>
+      </div>
+
+      <!-- 🔗 Redirect to Login -->
+      <p class="text-center mt-3 mb-0">
+        Already have an account? 
+        <a href="/login" class="text-decoration-none text-danger fw-semibold">Login here</a>
+      </p>
+    </form>
+  </div>
+</div>
