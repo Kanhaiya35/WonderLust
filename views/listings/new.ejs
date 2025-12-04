@@ -5,7 +5,7 @@
     <div class="card shadow-lg border-0 rounded-4 p-4">
       <h2 class="text-center mb-4 fw-bold">📝 Create a New Listing</h2>
 
-      <form method="POST" action="/listings" novalidate class="needs-validation">
+      <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
         
         <!-- Title -->
         <div class="mb-3">
@@ -37,15 +37,12 @@
 
         <!-- Image -->
         <div class="mb-3">
-          <label for="image" class="form-label fw-semibold">Image Link</label>
+          <label for="image" class="form-label fw-semibold">Upload Listing Image</label>
          <input 
   id="image" 
-  name="listing[image][url]" 
-  placeholder="Paste image URL (optional)" 
-  type="text" 
-  class="form-control"
->
-          <small class="text-muted">Tip: You can use Unsplash or any public image link.</small>
+  name="listing[image]" 
+  type="file" 
+  class="form-control">
         </div>
 
         <!-- Price & Country -->
