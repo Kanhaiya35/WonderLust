@@ -1,59 +1,46 @@
 const express = require("express");
 const router = express.Router();
-
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
+const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 
-const { isLoggedIn, isOwner, validateListing } = require("../midddleware.js");
-
-// Multer
 const multer = require("multer");
-
-// If you want only local upload:
-const upload = multer({ dest: "uploads/" });
-
-// If you want Cloudinary storage:
-// const { storage } = require("../cloudConfig.js");
-// const upload = multer({ storage });
+const { storage } = require("../cloudConfig.js"); 
+const upload = multer({ storage });
 
 const listingController = require("../controllers/listings.js");
 
-
 // INDEX + CREATE
-router
-  .route("/")
+router.route("/")
   .get(wrapAsync(listingController.index))
   .post(
     isLoggedIn,
-    upload.single("listing[image]"),   // input name from form
+    upload.single("listing[image]"),
+    validateListing,
     wrapAsync(listingController.createListing)
   );
 
-
-// NEW — Form
+// NEW FORM (must be before /:id routes)
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
-
 // SHOW + UPDATE + DELETE
-router
-  .route("/:id")
+router.route("/:id")
   .get(wrapAsync(listingController.showlisting))
   .put(
     isLoggedIn,
     isOwner,
-    upload.single("listing[image]"),   // upload in edit form
+    upload.single("listing[image]"),
     validateListing,
-    wrapAsync(listingController.updateform)
+    wrapAsync(listingController.updateListing)
   )
-  .delete(isLoggedIn, isOwner, wrapAsync(listingController.deleteListng));
+  .delete(isLoggedIn, isOwner, wrapAsync(listingController.deleteListing));
 
-
-// EDIT — Form
+// EDIT FORM
 router.get(
   "/:id/edit",
   isLoggedIn,
   isOwner,
-  wrapAsync(listingController.editform)
+  wrapAsync(listingController.renderEditForm)
 );
 
 module.exports = router;

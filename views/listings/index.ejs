@@ -1,38 +1,61 @@
 <% layout("layouts/boilerplate") %>
 
 <div class="container mt-4">
+
+  <!-- Title -->
   <h1 class="text-center mb-4 fw-bold">WonderLust</h1>
 
+  <!-- Listings Grid -->
   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+
     <% if (allListings && allListings.length > 0) { %>
-      <% for (let listing of allListings) { %>
+
+      <% allListings.forEach(listing => { %>
         <div class="col">
           <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
-            <div class="card h-100 shadow-sm">
-              
-              <!-- ✅ Handles both string and object (Cloudinary) image cases -->
+            <div class="card h-100 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+
+              <!-- IMAGE (Handles both Cloudinary objects + simple strings) -->
               <img 
                 src="<%= listing.image?.url || listing.image || 'https://via.placeholder.com/400x300?text=No+Image' %>"
                 class="card-img-top"
                 alt="<%= listing.title %>"
-                style="height: 20rem; object-fit: cover;"
+                style="
+                  height: 20rem; 
+                  width: 100%;
+                  object-fit: cover;
+                "
               >
 
+              <!-- CARD BODY -->
               <div class="card-body">
-                <h5 class="card-title"><%= listing.title %></h5>
+                <h5 class="card-title fw-semibold"><%= listing.title %></h5>
+
+                <!-- Price -->
                 <p class="card-text text-muted mb-1">
-                  &#8377; <%= (listing.price || 0).toLocaleString('en-IN') %> / night
+                  &#8377; <%= Number(listing.price || 0).toLocaleString('en-IN') %> / night
                 </p>
+
+                <!-- Location -->
                 <p class="card-text">
-                  <small><%= listing.location || "Unknown location" %>, <%= listing.country || "Unknown country" %></small>
+                  <small>
+                    <%= listing.location || "Unknown location" %>, 
+                    <%= listing.country || "Unknown country" %>
+                  </small>
                 </p>
               </div>
+
             </div>
           </a>
         </div>
-      <% } %>
+      <% }); %>
+
     <% } else { %>
+
+      <!-- No Listings Found -->
       <p class="text-center text-muted">No listings found. Add one to get started!</p>
+
     <% } %>
+
   </div>
 </div>

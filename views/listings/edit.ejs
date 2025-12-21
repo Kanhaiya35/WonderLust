@@ -8,9 +8,11 @@
       <form
         action="/listings/<%= listing._id %>?_method=PUT"
         method="POST"
-        novalidate
         class="needs-validation"
+        novalidate
+        enctype="multipart/form-data"
       >
+
         <!-- 🏷 Title -->
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
@@ -38,31 +40,33 @@
           <div class="invalid-feedback">Please enter a short description</div>
         </div>
 
-        <!-- 🖼 Image URL -->
+        <!-- 🖼 Upload New Image -->
         <div class="mb-3">
-          <label for="image" class="form-label">Image URL</label>
+          <label for="image" class="form-label">Upload New Image (Optional)</label>
           <input
-  id="image"
-  name="listing[image][url]"
-  value="<%= listing.image.url %>"
-  type="text"
-  class="form-control"
-  />
-          <div class="invalid-feedback">Please enter a valid image link</div>
+            id="image"
+            name="listing[image]"
+            type="file"
+            class="form-control"
+            accept="image/*"
+          />
+          <small class="text-muted">Leave empty to keep current image</small>
         </div>
 
-        <!-- 🖼 Image Preview -->
+        <!-- 🖼 Current Image Preview -->
+        <% if (listing.image && listing.image.url) { %>
         <div class="mb-3 text-center">
-          <p class="text-muted mb-1">Current Image Preview:</p>
+          <p class="text-muted mb-2">Current Image:</p>
           <img
             src="<%= listing.image.url %>"
             alt="<%= listing.title %>"
             class="img-thumbnail rounded shadow-sm"
-            style="max-width: 300px;"
+            style="max-width: 300px; max-height: 300px; object-fit: cover;"
           />
         </div>
+        <% } %>
 
-        <!-- 💰 Price and 🌍 Country -->
+        <!-- 💰 Price & 🌍 Country -->
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="price" class="form-label">Price</label>
@@ -70,7 +74,10 @@
               id="price"
               name="listing[price]"
               value="<%= listing.price %>"
+              type="number"
               class="form-control"
+              min="0"
+              step="0.01"
               required
             />
             <div class="invalid-feedback">Price should be valid</div>
@@ -104,9 +111,16 @@
           <div class="invalid-feedback">Location should be valid</div>
         </div>
 
-        <button type="submit" class="btn btn-dark edit-btn w-100 mt-3">
-          Save Changes
-        </button>
+        <!-- Action Buttons -->
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-dark">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+          <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+
       </form>
     </div>
   </div>
