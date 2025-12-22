@@ -24,10 +24,8 @@ if (!listing || !listing.geometry || !listing.geometry.coordinates) {
         zoom: 9
       });
 
-      // Add zoom + rotation controls
       map.addControl(new mapboxgl.NavigationControl());
 
-      // Add marker with popup
       const marker = new mapboxgl.Marker({ color: "red" })
         .setLngLat(coordinates)
         .setPopup(
@@ -40,9 +38,6 @@ if (!listing || !listing.geometry || !listing.geometry.coordinates) {
             )
         )
         .addTo(map);
-
-      // Optional: Open popup on load
-      // marker.togglePopup();
 
     } catch (error) {
       console.error("Error initializing map:", error);

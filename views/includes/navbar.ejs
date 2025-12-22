@@ -1,24 +1,122 @@
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+<nav class="navbar navbar-expand-md bg-white border-bottom sticky-top position-relative">
+  <div class="container-fluid position-relative">
+    <div class="d-flex align-items-center gap-3">
+      <a class="navbar-brand fw-bold mb-0" href="/listings">
+        <i class="fa-solid fa-compass"></i>
+      </a>
+      <a class="nav-link fw-medium" href="/listings">Explore</a>
+    </div>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" href="/">Home</a>
-        <a class="nav-link" href="/listings">Add Listings</a>
-        <a class="nav-link" href="/listings/new">Add new listings</a>
-      </div>
-      <div class="navbar-nav ms-auto">
+
+    <div class="search-center">
+      <form class="airbnb-search d-flex align-items-center" role="search">
+        <input 
+          type="search" 
+          placeholder="Search destinations"
+          aria-label="Search"
+        >
+        <button type="submit" class="search-btn">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+    </div>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <div class="navbar-nav align-items-center">
+
+        <a class="nav-link" href="/listings/new">Airbnb your home</a>
+
         <% if(!currUser) { %>
-        <a class="nav-link active" href="/signup">Sign up</a>
-        <a class="nav-link" href="/login">Login</a>
-       <% }%>
+          <a class="nav-link fw-semibold" href="/signup">Sign up</a>
+          <a class="nav-link fw-semibold" href="/login">Login</a>
+        <% } %>
+
         <% if(currUser) { %>
-        <a class="nav-link" href="/logout">Log out</a>
-        <% }%>
+          <a class="nav-link fw-semibold" href="/logout">Log out</a>
+        <% } %>
+
       </div>
     </div>
+
   </div>
 </nav>
+
+<style>
+  .search-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+  }
+
+  .airbnb-search {
+    border: 1px solid #ddd;
+    border-radius: 999px;
+    padding: 0.55rem;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+
+    min-width: 520px;
+    max-width: 640px;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: box-shadow 0.25s ease;
+  }
+
+  .airbnb-search:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+  }
+
+  .airbnb-search input {
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0.55rem 1rem;
+    width: 100%;
+  }
+
+  .airbnb-search input::placeholder {
+    color: #666;
+    font-weight: 500;
+  }
+
+  .search-btn {
+    border: none;
+    border-radius: 50%;
+    background: #ff385c;
+    color: white;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .search-btn:hover {
+    background: #e31c5f;
+  }
+
+  .search-btn i {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .search-center {
+      position: static;
+      transform: none;
+      margin: 0.5rem auto;
+      width: 100%;
+    }
+
+    .airbnb-search {
+      min-width: 100%;
+      max-width: 100%;
+    }
+  }
+</style>

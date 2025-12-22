@@ -20,7 +20,7 @@ router.route("/")
     wrapAsync(listingController.createListing)
   );
 
-// NEW FORM (must be before /:id routes)
+// NEW FORM 
 router.get("/new", isLoggedIn, listingController.renderNewForm);
 
 // SHOW + UPDATE + DELETE

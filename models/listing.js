@@ -67,11 +67,9 @@ const listingSchema = new Schema({
     }
   }
 }, {
-  timestamps: true // Optional: adds createdAt and updatedAt
+  timestamps: true
 });
 
-
-// 🔥 Auto-delete reviews when listing is removed
 listingSchema.post("findOneAndDelete", async function (listing) {
   if (listing && listing.reviews.length) {
     await Review.deleteMany({ _id: { $in: listing.reviews } });

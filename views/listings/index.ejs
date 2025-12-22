@@ -1,42 +1,184 @@
 <% layout("layouts/boilerplate") %>
 
+<style>
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0.8rem 0;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+  }
+
+  #filters {
+    display: flex;
+    gap: 2.2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    align-items: center;
+    padding-left: 0.5rem;
+  }
+
+  #filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter {
+    min-width: 85px;
+    text-align: center;
+    opacity: 0.65;
+    transition: all 0.25s ease;
+    padding-bottom: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .filter i {
+    font-size: 1.45rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .filter p {
+    font-size: 0.8rem;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .filter:hover {
+    opacity: 1;
+    cursor: pointer;
+    transform: translateY(-2px);
+  }
+
+  .filter.active {
+    opacity: 1;
+    border-bottom: 2px solid black;
+  }
+
+  .tax-toggle {
+    margin-left: auto;
+    margin-right: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 1.4rem;
+    padding: 0.6rem 1rem;
+    min-width: 240px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    flex-shrink: 0;
+  }
+
+  .tax-toggle:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .tax-text {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .tax-info {
+    display: none;
+    font-size: 0.8rem;
+    color: #555;
+  }
+</style>
+
 <div class="container mt-4">
 
-  <!-- Title -->
-  <h1 class="text-center mb-4 fw-bold">WonderLust</h1>
+  <div class="filter-bar">
 
-  <!-- Listings Grid -->
-  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+    <div id="filters">
+
+      <div class="filter active">
+        <i class="fa-solid fa-fire"></i>
+        <p>Trending</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-bed"></i>
+        <p>Rooms</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-house"></i>
+        <p>Entire Home</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-water"></i>
+        <p>Beach</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-mountain"></i>
+        <p>Mountains</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-tree"></i>
+        <p>Nature</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-city"></i>
+        <p>City</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-campground"></i>
+        <p>Camping</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-snowflake"></i>
+        <p>Arctic</p>
+      </div>
+
+      <div class="filter">
+        <i class="fa-solid fa-person-swimming"></i>
+        <p>Pool</p>
+      </div>
+
+    </div>
+
+    <div class="tax-toggle">
+      <span class="tax-text">Display total after taxes</span>
+      <div class="form-check form-switch m-0">
+        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4 mt-4">
 
     <% if (allListings && allListings.length > 0) { %>
 
       <% allListings.forEach(listing => { %>
         <div class="col">
           <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
-            <div class="card h-100 shadow-sm" style="border-radius: 12px; overflow: hidden;">
 
-              <!-- IMAGE (Handles both Cloudinary objects + simple strings) -->
+            <div class="card h-100 shadow-sm" style="border-radius: 14px; overflow: hidden;">
+
               <img 
                 src="<%= listing.image?.url || listing.image || 'https://via.placeholder.com/400x300?text=No+Image' %>"
                 class="card-img-top"
                 alt="<%= listing.title %>"
-                style="
-                  height: 20rem; 
-                  width: 100%;
-                  object-fit: cover;
-                "
+                style="height: 20rem; width: 100%; object-fit: cover;"
               >
 
-              <!-- CARD BODY -->
               <div class="card-body">
                 <h5 class="card-title fw-semibold"><%= listing.title %></h5>
 
-                <!-- Price -->
                 <p class="card-text text-muted mb-1">
                   &#8377; <%= Number(listing.price || 0).toLocaleString('en-IN') %> / night
+                  <span class="tax-info">&nbsp; +18% GST</span>
                 </p>
 
-                <!-- Location -->
                 <p class="card-text">
                   <small>
                     <%= listing.location || "Unknown location" %>, 
@@ -46,16 +188,37 @@
               </div>
 
             </div>
+
           </a>
         </div>
-      <% }); %>
+      <% }) %>
 
     <% } else { %>
-
-      <!-- No Listings Found -->
       <p class="text-center text-muted">No listings found. Add one to get started!</p>
-
     <% } %>
 
   </div>
 </div>
+
+<script>
+  const filters = document.querySelectorAll(".filter");
+
+  filters.forEach(filter => {
+    filter.addEventListener("click", () => {
+      filters.forEach(f => f.classList.remove("active"));
+      filter.classList.add("active");
+    });
+  });
+</script>
+
+<script>
+  const taxSwitch = document.getElementById("switchCheckDefault");
+
+  taxSwitch.addEventListener("click", () => {
+    const taxInfo = document.getElementsByClassName("tax-info");
+
+    for (let info of taxInfo) {
+      info.style.display = info.style.display === "inline" ? "none" : "inline";
+    }
+  });
+</script>

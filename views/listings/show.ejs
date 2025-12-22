@@ -2,7 +2,7 @@
 
 <script>
   const mapToken = "<%= process.env.MAP_TOKEN %>";
-  const listing = <%- JSON.stringify(listing) %>;
+  const listing = "<%- JSON.stringify(listing) %>";
 </script>
 
 <div class="container mt-4">
@@ -84,7 +84,7 @@
 
     <hr class="m-0">
 
-    <!-- MAP SECTION (moved before reviews) -->
+    <!-- MAP SECTION  -->
     <% if (listing.geometry && listing.geometry.coordinates) { %>
     <div class="p-4">
       <h4 class="fw-bold mb-3">📍 Where you'll be</h4>

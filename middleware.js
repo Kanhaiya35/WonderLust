@@ -3,9 +3,7 @@ const Review = require("./models/review.js");
 const ExpressError = require("./utils/ExpressError.js");
 const { listingSchema, reviewSchema } = require("./schema.js");
 
-// -----------------------------
 // LOGIN CHECK
-// -----------------------------
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
@@ -15,9 +13,7 @@ module.exports.isLoggedIn = (req, res, next) => {
   next();
 };
 
-// -----------------------------
 // SAVE REDIRECT URL
-// -----------------------------
 module.exports.saveRedirectUrl = (req, res, next) => {
   if (req.session.redirectUrl) {
     res.locals.redirectUrl = req.session.redirectUrl;
@@ -25,9 +21,7 @@ module.exports.saveRedirectUrl = (req, res, next) => {
   next();
 };
 
-// -----------------------------
 // LISTING OWNER CHECK
-// -----------------------------
 module.exports.isOwner = async (req, res, next) => {
   const { id } = req.params;
 
@@ -49,16 +43,11 @@ module.exports.isOwner = async (req, res, next) => {
 
   next();
 };
+// LISTING VALIDATION
 
-// -----------------------------
-// LISTING VALIDATION (FIXED FOR FILE UPLOADS)
-// -----------------------------
-// LISTING VALIDATION (FIXED FOR FILE UPLOADS)
 module.exports.validateListing = (req, res, next) => {
-  // Create a copy of req.body for validation
   let listingData = { ...req.body };
-  
-  // If a file was uploaded, create a mock image object for validation
+
   if (req.file) {
     listingData.listing = {
       ...listingData.listing,
@@ -78,9 +67,7 @@ module.exports.validateListing = (req, res, next) => {
   
   next();
 };
-// -----------------------------
 // REVIEW VALIDATION
-// -----------------------------
 module.exports.validateReview = (req, res, next) => {
   const { error } = reviewSchema.validate(req.body);
   if (error) {
@@ -90,9 +77,7 @@ module.exports.validateReview = (req, res, next) => {
   next();
 };
 
-// -----------------------------
 // REVIEW AUTHOR CHECK
-// -----------------------------
 module.exports.isReviewAuthor = async (req, res, next) => {
   const { id, reviewId } = req.params;
 

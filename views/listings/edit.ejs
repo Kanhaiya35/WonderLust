@@ -13,7 +13,7 @@
         enctype="multipart/form-data"
       >
 
-        <!-- 🏷 Title -->
+        <!-- Title -->
         <div class="mb-3">
           <label for="title" class="form-label">Title</label>
           <input
@@ -27,7 +27,6 @@
           <div class="invalid-feedback">Enter a valid title</div>
         </div>
 
-        <!-- 📝 Description -->
         <div class="mb-3">
           <label for="description" class="form-label">Description</label>
           <textarea
@@ -40,7 +39,7 @@
           <div class="invalid-feedback">Please enter a short description</div>
         </div>
 
-        <!-- 🖼 Upload New Image -->
+        <!-- Upload New Image -->
         <div class="mb-3">
           <label for="image" class="form-label">Upload New Image (Optional)</label>
           <input
@@ -53,7 +52,7 @@
           <small class="text-muted">Leave empty to keep current image</small>
         </div>
 
-        <!-- 🖼 Current Image Preview -->
+        <!-- Current Image Preview -->
         <% if (listing.image && listing.image.url) { %>
         <div class="mb-3 text-center">
           <p class="text-muted mb-2">Current Image:</p>
@@ -66,7 +65,7 @@
         </div>
         <% } %>
 
-        <!-- 💰 Price & 🌍 Country -->
+        <!--  Price & Country -->
         <div class="row">
           <div class="col-md-6 mb-3">
             <label for="price" class="form-label">Price</label>
@@ -97,7 +96,7 @@
           </div>
         </div>
 
-        <!-- 📍 Location -->
+        <!--  Location -->
         <div class="mb-3">
           <label for="location" class="form-label">Location</label>
           <input

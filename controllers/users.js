@@ -24,7 +24,6 @@ module.exports.signup = async (req, res, next) => {
     }
 };
 
-// RENDER LOGIN FORM (FIXED NAME)
 module.exports.renderLoginForm = (req, res) => {
     res.render("users/login.ejs");
 };
@@ -34,8 +33,7 @@ module.exports.login = (req, res) => {
     req.flash("success", "Welcome back to WonderLust!");
 
     const redirectUrl = res.locals.redirectUrl || "/listings";
-    delete req.session.redirectUrl; // Clear after use
-
+    delete req.session.redirectUrl; 
     res.redirect(redirectUrl);
 };
 

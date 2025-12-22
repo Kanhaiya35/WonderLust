@@ -47,21 +47,17 @@ module.exports.createListing = async (req, res) => {
   console.log("📦 Body:", req.body);
   console.log("🖼️ File:", req.file);
   try {
-    // Geocode the location
     let response = await geocodingClient.forwardGeocode({
       query: req.body.listing.location,
       limit: 1
     }).send();
 
-    // Check if geocoding returned results
     if (!response.body.features || response.body.features.length === 0) {
       req.flash("error", "Invalid location! Please enter a valid location.");
       return res.redirect("/listings/new");
     }
 
     const newListing = new Listing(req.body.listing);
-
-    // IMAGE FROM CLOUDINARY
     if (req.file) {
       newListing.image = {
         url: req.file.url,
@@ -110,14 +106,13 @@ module.exports.updateListing = async (req, res) => {
       return res.redirect("/listings");
     }
 
-    // Update normal fields
+    
     listing.title = req.body.listing.title;
     listing.description = req.body.listing.description;
     listing.price = req.body.listing.price;
     listing.location = req.body.listing.location;
     listing.country = req.body.listing.country;
 
-    // Update geometry if location changed
     if (req.body.listing.location !== listing.location) {
       let response = await geocodingClient.forwardGeocode({
         query: req.body.listing.location,
@@ -129,9 +124,7 @@ module.exports.updateListing = async (req, res) => {
       }
     }
 
-    // If new file uploaded → replace Cloudinary image
     if (req.file) {
-      // Delete old image from Cloudinary
       if (listing.image && listing.image.filename) {
         await cloudinary.uploader.destroy(listing.image.filename);
       }
