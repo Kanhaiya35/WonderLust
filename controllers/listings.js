@@ -64,7 +64,7 @@ module.exports.createListing = async (req, res) => {
     // IMAGE FROM CLOUDINARY
     if (req.file) {
       newListing.image = {
-        url: req.file.path,
+        url: req.file.url,
         filename: req.file.filename
       };
     }
@@ -137,7 +137,7 @@ module.exports.updateListing = async (req, res) => {
       }
 
       listing.image = {
-        url: req.file.path,
+        url: req.file.url,
         filename: req.file.filename
       };
     }

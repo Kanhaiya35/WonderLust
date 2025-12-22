@@ -53,10 +53,23 @@ module.exports.isOwner = async (req, res, next) => {
 // -----------------------------
 // LISTING VALIDATION (FIXED FOR FILE UPLOADS)
 // -----------------------------
+// LISTING VALIDATION (FIXED FOR FILE UPLOADS)
 module.exports.validateListing = (req, res, next) => {
-  // If image is uploaded via multer, it's in req.file, not req.body
-  // So we need to handle validation differently
-  const { error } = listingSchema.validate(req.body);
+  // Create a copy of req.body for validation
+  let listingData = { ...req.body };
+  
+  // If a file was uploaded, create a mock image object for validation
+  if (req.file) {
+    listingData.listing = {
+      ...listingData.listing,
+      image: {
+        url: req.file.path,
+        filename: req.file.filename
+      }
+    };
+  }
+  
+  const { error } = listingSchema.validate(listingData);
   
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
@@ -65,7 +78,6 @@ module.exports.validateListing = (req, res, next) => {
   
   next();
 };
-
 // -----------------------------
 // REVIEW VALIDATION
 // -----------------------------
